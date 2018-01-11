@@ -82,7 +82,7 @@
         <div class="section">
           <h3><% $label | n %></h3>
           <ul>
-%           for my $item (@$items) {
+%           for my $item (sort {$a->{'label'} cmp $b->{'label'}} @$items) {
               <& /Elements/ShowSelectSearch, %$item &>
 %           }
           </ul>
