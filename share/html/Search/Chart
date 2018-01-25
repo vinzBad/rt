@@ -533,6 +533,32 @@ $chart->{dclrs} = [ RT->Config->Get("ChartColors") ];
         my $color_hex = $self->{dclrs}[ $_[0] % @{ $self->{dclrs} } - 1 ];
         return map { hex } ( $color_hex =~ /(..)(..)(..)/ );
     };
+
+    if ( $chart_options{cumulate} ) {
+        # we want to show extra info such as status or queue names in bar values,
+        # but values are supposed to be numeric. though strings like "2 open"
+        # could be automatically interpreted to numbers, "isn't numeric" warnings
+        # will be emitted too. it's ok to silence them since it's expected.
+
+        no strict 'refs';
+        my @warning_subs = ();
+        for my $pkg ( 'GD::Graph::Data::', 'GD::Graph::axestype::' ) {
+            push @warning_subs, map { $pkg . $_ } grep { /^[a-z_]+$/ } keys %$pkg;
+        }
+
+        if ( !$RT::HandledGDGraphNumericWarnings ) {
+            for my $warning_sub ( @warning_subs ) {
+                my ( $package, $sub ) = $warning_sub =~ /(.+)::(\w+)/;
+                if ( my $orig = $package->can($sub) ) {
+                    *$warning_sub = sub {
+                        local $SIG{__WARN__} = sub { warn $_[0] unless $_[0] =~ /isn't numeric/ };
+                        $orig->( @_ );
+                    };
+                }
+            }
+            $RT::HandledGDGraphNumericWarnings = 1;
+        }
+    }
 }
 
 if (my $plot = eval { $chart->plot( \@data ) }) {
