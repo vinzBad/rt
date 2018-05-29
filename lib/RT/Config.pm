@@ -1617,7 +1617,7 @@ sub SetFromConfig {
     if ( exists $OPTIONS{$name} ) {
         if ( $type eq 'HASH' ) {
             $args{'Value'} = [
-                @{ $args{'Value'} },
+                grep (/$name/, @{$OPTIONS{ClearHash}}) ? () : @{ $args{'Value'} },
                 @{ $args{'Value'} }%2? (undef) : (),
                 $self->Get( $name ),
             ];
