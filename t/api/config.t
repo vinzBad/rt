@@ -1,7 +1,11 @@
 use strict;
 use warnings;
 use RT;
-use RT::Test nodb => 1, tests => undef;
+
+use RT::Test nodb => 1, tests => undef, config => <<'CONFIG';
+Set(%PriorityAsString, Green => 1, Yellow => 50, Red => 100);
+CONFIG
+
 use Test::Warn;
 
 ok(
@@ -45,5 +49,14 @@ warning_like {RT::Config->PostLoadCheck} qr{rudder},
 
 my @canonical_encodings = RT::Config->Get('EmailInputEncodings');
 is_deeply(\@encodings, \@canonical_encodings, 'Got correct encoding list');
+
+my %PriorityAsString = RT::Config->Get('PriorityAsString');
+
+foreach (qw/Low Medium High/) {
+    is $PriorityAsString{$_}, undef , 'Does not have default config values for PriorityAsString';
+}
+foreach (qw/Green Yellow Red/) {
+    ok $PriorityAsString{$_} ,'SiteConfig value for PriorityAsString overrode default value completly';
+}
 
 done_testing;
