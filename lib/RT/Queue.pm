@@ -772,6 +772,7 @@ sub _Set {
             $args{'TransactionType'} = ($args{'Value'} == 1) ? "Disabled" : "Enabled";
             delete $args{'Field'};
         }
+
         my ( undef, undef, $TransObj ) = $self->_NewTransaction(
             Type      => $args{'TransactionType'},
             Field     => $args{'Field'},
@@ -1194,12 +1195,23 @@ sub SetDefaultValue {
         },
     );
 
+    if( $args{Name}=~ /^(Initial|Final)Priority/ ) {
+        $old_value= $self->_PriorityAsString( $old_value );
+        $new_value= $self->_PriorityAsString( $new_value );
+    }
+
     if ( $ret ) {
         return ( $ret, $self->loc( 'Default value of [_1] changed from [_2] to [_3]', $args{Name}, $old_value, $new_value ) );
     }
     else {
         return ( $ret, $self->loc( "Can't change default value of [_1] from [_2] to [_3]: [_4]", $args{Name}, $old_value, $new_value, $msg ) );
     }
+}
+
+sub _PriorityAsString {
+    my( $self, $priority)= @_;
+    my $map = RT->Config->PriorityMap( $self->Name );
+    return RT::Ticket->_PriorityAsString( $priority, $map );
 }
 
 sub SLA {

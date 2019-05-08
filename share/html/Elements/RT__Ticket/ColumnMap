@@ -366,6 +366,8 @@ my $printer = sub {
     return \( qq{<span class="ticket-info-$class-}. lc($escaped) .qq{">$loc_escaped</span>} );
 };
 
+my $queues = RT->Config->Get('PriorityAsString') || {};
+
 foreach my $field (qw(Priority InitialPriority FinalPriority)) {
     $COLUMN_MAP->{ $field .'Number' } ||= $COLUMN_MAP->{ $field };
 
@@ -374,14 +376,13 @@ foreach my $field (qw(Priority InitialPriority FinalPriority)) {
 
     my $method = $field .'AsString';
 
-    my %queues = RT->Config->Get('PriorityAsStringQueues') || ();
-    if (not keys %queues) {
+    if (not keys %$queues) {
         $COLUMN_MAP->{ $field }{'value'} = sub {
             return $printer->( $class, $_[0]->$method() );
         };
     } else {
         $COLUMN_MAP->{ $field }{'value'} = sub {
-            return $queues{$_[0]->QueueObj->Name}
+            return $queues->{$_[0]->QueueObj->Name}
                 ? $printer->( $class, $_[0]->$method() )
                 : $_[0]->$field;
         };

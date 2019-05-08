@@ -2801,10 +2801,18 @@ sub _Set {
     return ( $ret, $msg ) unless $args{'RecordTransaction'};
 
     my $trans;
+
+    my $New= $args{'Value'};
+    # *Priority fields may need to be translated
+    if( $args{'Field'} =~ m{^(Initial|Final)?Priority$}) { 
+        $Old= $self->_PriorityAsString( $Old ); 
+        $New= $self->_PriorityAsString( $New );
+    }
+
     ( $ret, $msg, $trans ) = $self->_NewTransaction(
         Type      => $args{'TransactionType'},
         Field     => $args{'Field'},
-        NewValue  => $args{'Value'},
+        NewValue  => $New,
         OldValue  => $Old,
         TimeTaken => $args{'TimeTaken'},
     );
@@ -3706,7 +3714,7 @@ sub Serialize {
 # Returns String: Various Ticket Priorities as either a string or integer
 sub PriorityAsString {
     my $self = shift;
-    return $self->_PriorityAsString($self->Priority);
+    return $self->_PriorityAsString( $self->Priority );
 }
 
 sub InitialPriorityAsString {
@@ -3724,25 +3732,28 @@ sub _PriorityAsString {
     my $priority = shift;
     return undef unless defined $priority && length $priority;
 
-    my %map;
-    my $queues = RT->Config->Get('PriorityAsStringQueues');
-    if (@_) {
-        %map = %{ shift(@_) };
-    } elsif ($queues and $queues->{$self->QueueObj->Name}) {
-        %map = %{ $queues->{$self->QueueObj->Name} };
-    } else {
-        %map = RT->Config->Get('PriorityAsString');
+    my $map;
+    if( @_ ) {
+        $map = shift;
+    } else { 
+        my $queue_name = $self->QueueObj->Name;
+        $map = RT->Config->PriorityMap( $queue_name);
     }
 
-    # Count from high down to low until we find one that our number is
-    # greater than or equal to.
-    if ( values %map ) {
-        foreach my $label ( sort { $map{$b} <=> $map{$a} } keys %map ) {
-            return $label if $priority >= $map{ $label };
-        };
-    }
-    return "unknown";
+    return $priority if ! $map;
+
+    my @orderedLabels = sort { $map->{$b} <=> $map->{$a} }  keys %$map;
+
+    # return the label for the first priority <= $priority
+    foreach my $label ( @orderedLabels ) {
+        return $label if $priority >= $map->{ $label };
+    };
+    # if we get here the priority is lower than the lowest in the map
+    # return the label associated with the lowest priority
+    return $orderedLabels[-1];
+
 }
+
 
 RT::Base->_ImportOverlays();
 

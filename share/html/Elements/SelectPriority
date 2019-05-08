@@ -78,24 +78,16 @@ my @order;
 my $default_label = '';
 my %map = ();
 
-if ($PriorityStringMap) {
-    %map = %{$PriorityStringMap};
-} elsif ($QueueObj and ! RT->Config->Get('NumericalPriority')) {
-    my %config = RT->Config->Get('PriorityAsStringQueues') ?  RT->Config->Get('PriorityAsStringQueues') : ();
-    %map = %config && $config{$QueueObj->Name} ? %{$config{$QueueObj->Name}} : RT->Config->Get('PriorityAsString');
-}
-
-if (%map) {
-    if (RT->Config->Get('PriorityAsStringOrder')) {
-    @order = grep {exists $map{$_}} RT->Config->Get('PriorityAsStringOrder');
-    } else {
-    @order = sort { $map{$a} <=> $map{$b} } keys %map;
-    }
-
-    if ( defined $Default && length $Default ) {
-    $default_label = RT::Ticket->_PriorityAsString( $Default, \%map ) || '';
+if( $QueueObj ) {
+    if( my $map = RT->Config->PriorityMap( $QueueObj->Name ) ) {
+        %map   = %$map;
+        @order = @{RT->Config->PriorityMapOrder( $QueueObj->Name)};
+        if ( defined $Default && length $Default ) {
+        $default_label = RT::Ticket->_PriorityAsString( $Default, \%map ) || '';
+        }
     }
 }
+
 
 $Default = '' unless defined $Default;
 </%INIT>

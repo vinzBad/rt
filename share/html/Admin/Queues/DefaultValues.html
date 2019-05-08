@@ -59,11 +59,13 @@
     <td><& /Elements/SelectPriority,
         Name => "InitialPriority",
         Default => $queue->DefaultValue('InitialPriority'),
+        QueueObj  => $queue,
     &></td></tr>
     <tr><td class="label"><&|/l&>Final Priority</&>:</td>
     <td><& /Elements/SelectPriority,
         Name => "FinalPriority",
         Default => $queue->DefaultValue('FinalPriority'),
+        QueueObj  => $queue,
     &><br /><span><em><&|/l&>requires running rt-crontool</&></em></span></td></tr>
     <& /Elements/EditCustomFields,
         Object => RT::Ticket->new($session{CurrentUser}),

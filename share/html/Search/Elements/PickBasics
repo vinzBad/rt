@@ -223,13 +223,14 @@ my @lines = (
     },
 );
 
-my %priority_strings = RT->Config->Get('PriorityAsStringQueues') || ();
-if ( !RT->Config->Get('NumericalPriority') ) {
+
+if ( RT->Config->Get('EnablePriorityAsString') ) {
     my ($priority_dropdown) = grep {$_->{Name} eq "Priority"} @lines;
     my %priority_map = ( '-' => '' );
     for my $queue (keys %queues) {
-    for my $priority (keys %{$priority_strings{$queue}}) {
-        $priority_map{ keys %queues > 1 ? "$queue: $priority" : "$priority" } = $priority_strings{$queue}{$priority};
+    my $queue_priority_map= RT::Config->PriorityMap( $queue);
+    for my $priority ( keys %$queue_priority_map ) {
+        $priority_map{ keys %queues > 1 ? "$queue: $priority" : "$priority" } = $queue_priority_map->{$priority};
     }
     }
     $priority_dropdown->{Value}{Arguments}{PriorityStringMap} = \%priority_map;
