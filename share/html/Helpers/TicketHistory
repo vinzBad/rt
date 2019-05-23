@@ -47,6 +47,7 @@
 %# END BPS TAGGED BLOCK }}}
 <%ARGS>
 $id
+$ShowHeaders => 0
 </%ARGS>
 <%INIT>
 my $TicketObj = RT::Ticket->new($session{'CurrentUser'});
