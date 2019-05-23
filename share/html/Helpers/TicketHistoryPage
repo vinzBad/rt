@@ -91,6 +91,7 @@ if ($focusTransactionId) { # make sure we load enough if we need to focus a tran
 <& /Elements/ShowHistoryPage,
     Object => $TicketObj,
     ShowHeaders => $ARGS{'ShowHeaders'},
+    ReverseTransactionOrder => $ARGS{'ReverseTransactionOrder'},
     Transactions => $transactions,
     %extra_args,
     &>
