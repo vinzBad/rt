@@ -59,7 +59,7 @@
         <div class="OneTimeCcs hidden">
 %   }
 <i class="label">(<&|/l&>check to add</&>)</i>
-<input type="checkbox" class="checkbox" id="AllSuggestedCc" name="AllSuggestedCc" value="1" onclick="setCheckbox(this, /^UpdateCc-/, null, true)">
+<input type="checkbox" class="checkbox" id="AllSuggestedCc" name="AllSuggestedCc" value="1" autocomplete="off" onclick="setCheckbox(this, /^UpdateCc-/, null, true)">
 <label for="AllSuggestedCc"><% loc('All recipients') %></label>
 %}
 %foreach my $addr ( @one_time_Ccs ) {
@@ -69,6 +69,7 @@
     name="UpdateCc-<%$addr%>"
     class="onetime onetimecc"
     type="checkbox"
+    autocomplete="off"
 % my $clean_addr = $txn_addresses{$addr}->format;
     onClick="checkboxToInput('UpdateCc', <% "UpdateCc-$addr" |n,j%>, <%$clean_addr|n,j%> );"
     <% $ARGS{'UpdateCc-'.$addr} ? 'checked="checked"' : ''%> >
@@ -89,7 +90,7 @@
         <div class="OneTimeCcs hidden">
 %   }
 <i class="label">(<&|/l&>check to add</&>)</i>
-<input type="checkbox" class="checkbox" id="AllSuggestedBcc" name="AllSuggestedBcc" value="1" onclick="setCheckbox(this, /^UpdateBcc-/, null, true)">
+<input type="checkbox" class="checkbox" id="AllSuggestedBcc" name="AllSuggestedBcc" value="1" autocomplete="off" onclick="setCheckbox(this, /^UpdateBcc-/, null, true)">
 <label for="AllSuggestedBcc"><% loc('All recipients') %></label>
 %}
 %foreach my $addr ( @one_time_Ccs ) {
@@ -99,6 +100,7 @@
     name="UpdateBcc-<%$addr%>"
     class="onetime onetimebcc"
     type="checkbox"
+    autocomplete="off"
 % my $clean_addr = $txn_addresses{$addr}->format;
     onClick="checkboxToInput('UpdateBcc', <% "UpdateBcc-$addr" |n,j%>, <%$clean_addr|n,j%> );"
     <% $ARGS{'UpdateBcc-'.$addr} ? 'checked="checked"' : ''%> >

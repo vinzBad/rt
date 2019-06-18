@@ -65,6 +65,7 @@
 
 % if ($AutocompleteMultiple) {
     data-autocomplete-multiple
+    autocomplete="off"
 % }
 
 % if ($AutocompleteReturn) {
