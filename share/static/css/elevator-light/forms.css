@@ -122,6 +122,10 @@ button {
     margin-top: 0.5em;
 }
 
+.form-row > .value .form-row {
+    margin-top: 0;
+}
+
 div.field label.select-queue {
     display: block;
     margin-bottom: 0;
