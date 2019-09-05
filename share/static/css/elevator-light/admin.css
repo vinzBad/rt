@@ -24,24 +24,8 @@
 
 
 
-#rights-inspector .search .loading,
-#rights-inspector > .loading {
+#rights-inspector .loading {
     display: none;
-}
-
-#rights-inspector .search .loading img,
-#rights-inspector > .loading img,
-#rights-inspector .results .revoke img {
-    height: 1.5em;
-    width: 1.5em;
-}
-
-#rights-inspector.awaiting-first-result .search .loading {
-    display: inline;
-}
-
-#rights-inspector.continuing-load > .loading {
-    display: inline;
 }
 
 #rights-inspector.error .results {
