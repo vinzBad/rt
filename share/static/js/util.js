@@ -631,3 +631,16 @@ function toggle_hide_unset(e) {
 
     return false;
 }
+
+// home is included in all RT pages, and is generated in Mason by the server from the
+// WebPath config variable, so it should be accurate 
+function rt_home () {
+    var home= jQuery('#home').attr( 'href');
+    // additional safety measure, in case the home url does not include a trailing /
+    if( ! home.match( /\/$/) ) {
+        home = home + '/';
+    }
+    return home;
+}
+
+

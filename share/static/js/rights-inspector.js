@@ -199,7 +199,7 @@ function render_inspector_result (item) {
         +  '  <div class="object cell col-md-3">' + render_inspector_record( item.object) + '</div>'
         +  '  <div class="right cell col-md-3">' + item.right_highlighted + '</div>'
         +  '  <div class="revoke cell col-md-2">'
-        +  '      <button type="button" data-action="/Helpers/RightsInspector/Revoke?id=' + item.ace.id + '" ' + revoke + '>Revoke</button>'
+        +  '      <button type="button" data-action="' + rt_home() + 'Helpers/RightsInspector/Revoke?id=' + item.ace.id + '" ' + revoke + '>Revoke</button>'
         + '  </div>'
         + '</div>'
     ;
