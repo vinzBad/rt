@@ -23,21 +23,6 @@
 }
 
 
-#rights-inspector .search input, 
-#rights-inspector .results .result .cell {
-    display: inline-block;
-    width: 15em;
-}
-
-#rights-inspector .results .result .cell {
-    text-overflow: ellipsis;
-    overflow: hidden;
-}
-
-#rights-inspector .results .result .cell.revoke {
-    display: inline-block;
-    width: auto;
-}
 
 #rights-inspector .search .loading,
 #rights-inspector > .loading {
@@ -67,10 +52,6 @@
 
 #rights-inspector.awaiting-first-result .results {
     opacity: 0.5;
-}
-
-#rights-inspector .results .result .cell {
-    //vertical-align: top;
 }
 
 #rights-inspector .results .result:nth-child(even) {
@@ -111,7 +92,7 @@
     display: none;
 }
 
-#rights-inspector-help kbd {
+#rt-help-text kbd {
     color: #111;
     border: 1px dashed #AAA;
     background-color: #F6F6F6;
