@@ -2,7 +2,7 @@
 #
 # COPYRIGHT:
 #
-# This software is Copyright (c) 1996-2016 Best Practical Solutions, LLC
+# This software is Copyright (c) 1996-2019 Best Practical Solutions, LLC
 #                                          <sales@bestpractical.com>
 #
 # (Except where explicitly superseded by other copyright notices)
@@ -974,7 +974,7 @@ sub _BuildAdminMenu {
     }
     $admin_tools->child( rights_inspector =>
         title => loc('Rights Inspector'),
-        description => loc('Search your configured permissions'),
+        description => loc('Search your configured rights'),
         path  => '/Admin/Tools/RightsInspector.html',
     );
     $admin_tools->child( shredder =>
