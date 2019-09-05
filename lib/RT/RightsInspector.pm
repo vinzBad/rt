@@ -16,7 +16,7 @@ use warnings;
 #     record     - generalization of principal and object since rendering
 #                  and whatnot can share code
 
-my $PageLimit = 100;
+my $PageLimit = 10;
 
 $RT::Interface::Web::WHITELISTED_COMPONENT_ARGS{'/Admin/RightsInspector/index.html'} = ['Principal', 'Object', 'Right'];
 
@@ -582,6 +582,7 @@ sub SerializeACE {
 # should the "Revoke" button be disabled? by default it is for the two required
 # system privileges; if such privileges needed to be revoked they can be done
 # through the ordinary ACL management UI
+# it is also disabled for SuperUser, otherwise it is too easy to completely hose the system
 sub DisableRevoke {
     my $self = shift;
     my $ACE = shift;
@@ -591,7 +592,7 @@ sub DisableRevoke {
 
     if ($Principal->Object->Domain eq 'ACLEquivalence') {
         my $User = $Principal->Object->InstanceObj;
-        if ($User->Id == RT->SystemUser->Id && $Object->isa('RT::System') && $Right eq 'SuperUser') {
+        if ($Object->isa('RT::System') && $Right eq 'SuperUser') {
             return 1;
         }
         if ($User->Id == RT->Nobody->Id && $Object->isa('RT::System') && $Right eq 'OwnTicket') {
