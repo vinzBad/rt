@@ -60,8 +60,8 @@
 }
 
 .create-wide   { display: block; }
-.create-medium { display: none; }
-.create-narrow { display: none; }
+.create-medium { display: none !important; } /* Need to override display in .form-row */
+.create-narrow { display: none !important; }
 
 /* be overly specific to defeat specificity */
 #app-nav.sf-menu > li#li-overflow,
