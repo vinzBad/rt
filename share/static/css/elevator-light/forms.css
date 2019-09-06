@@ -122,11 +122,6 @@ button {
     margin-top: 0.5em;
 }
 
-div.field label.select-queue {
-    display: block;
-    margin-bottom: 0;
-}
-
 .col-auto .datepicker {
     width: 17em;
 }
