@@ -16,7 +16,7 @@ use warnings;
 #     record     - generalization of principal and object since rendering
 #                  and whatnot can share code
 
-my $PageLimit = 10;
+my $PageLimit = 100;
 
 $RT::Interface::Web::WHITELISTED_COMPONENT_ARGS{'/Admin/RightsInspector/index.html'} = ['Principal', 'Object', 'Right'];
 

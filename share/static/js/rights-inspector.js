@@ -1,8 +1,7 @@
-jQuery(function () {
-
+jQuery(document).ready( function () {
     var form = jQuery('form#rights-inspector');
     var display = form.find('.results');
-    var loading = form.find('.search .loading');
+    var spinner = form.find('.spinner');
 
     var revoking = {};
     var existingRequest;
@@ -18,7 +17,7 @@ jQuery(function () {
         }
 
         button.addClass('ui-state-disabled').prop('disabled', true);
-        button.after(loading.clone());
+        button.after(spinner.clone());
     };
 
     var displayError = function (message) {
@@ -76,6 +75,7 @@ jQuery(function () {
                         form.removeClass('awaiting-first-result');
                         display.text('No results');
                     }
+                jQuery( '.spinner').hide();
                 }
             },
             error: function (xhr, reason) {
@@ -91,6 +91,7 @@ jQuery(function () {
     var beginSearch = function (delay) {
         form.removeClass('continuing-load').addClass('awaiting-first-result');
         form.find('button').addClass('ui-state-disabled').prop('disabled', true);
+        jQuery( '.spinner').show();
 
         var serialized = form.serializeArray();
         var search = {};
@@ -136,7 +137,7 @@ jQuery(function () {
                     alert(response.msg);
                 }
                 else {
-                    button.closest('.revoke').text(response.msg);
+                    button.closest('.revoke').removeClass('col-md-1').addClass('col-md-3').text(response.msg);
                 }
                 delete revoking[action];
             },
@@ -149,13 +150,15 @@ jQuery(function () {
         });
     });
 
-    form.find('.search input').on('input', function () {
+    form.find('input').on('input', function () {
         beginSearch(200);
     });
 
     beginSearch();
 });
 
+
+// rendering functions
 
 function render_inspector_record (record) {
     return '<span class="record ' + cond_text( record.disabled, 'disabled') + '">'
@@ -172,8 +175,6 @@ function render_inspector_record (record) {
     ;
 
 }
-
-// rendering functions
 
 function render_inspector_primary_record (primary_record) {
     return primary_record ? '<span class="primary">Contains ' + render_inspector_record( primary_record) + '</span>'
@@ -199,8 +200,8 @@ function render_inspector_result (item) {
         +  '  <div class="principal cell col-md-3">' + render_inspector_record( item.principal) + '</div>'
         +  '  <div class="object cell col-md-3">' + render_inspector_record( item.object) + '</div>'
         +  '  <div class="right cell col-md-3">' + item.right_highlighted + '</div>'
-        +  '  <div class="revoke cell col-md-2">'
-        +  '      <button type="button" data-action="' + RT.Config.WebPath + '/Helpers/RightsInspector/Revoke?id=' + item.ace.id + '" ' + disabled_state + '>Revoke</button>'
+        +  '  <div class="revoke cell col-md-1">'
+        +  '      <button type="button" class="revoke-button" data-action="' + RT.Config.WebPath + '/Helpers/RightsInspector/Revoke?id=' + item.ace.id + '" ' + disabled_state + '>Revoke</button>'
         + '  </div>'
         + '</div>'
     ;
